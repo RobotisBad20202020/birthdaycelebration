@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Countdown</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      font-family: 'Helvetica Neue', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* Main container for the message */
+    .container {
+      text-align: center;
+    }
+
+    /* Style for the birthday message */
+    .message {
+      font-size: 60px;
+      font-weight: bold;
+      color: #ff7f50;
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Style for the final message */
+    .final-message {
+      font-size: 48px; /* Slightly smaller than the birthday message */
+      font-weight: normal; /* Regular weight for better visibility */
+      color: #4B0082; /* Dark violet color */
+      font-family: 'Cursive', sans-serif; /* Cursive font style */
+      margin-top: 20px; /* Spacing above the final message */
+      opacity: 0; /* Start hidden */
+      transition: opacity 0.5s ease; /* Smooth transition */
+    }
+
+    /* Show the message */
+    .visible {
+      opacity: 1;
+    }
+
+    /* Countdown timer styling */
+    .countdown {
+      font-size: 48px;
+      color: #333333;
+      margin: 20px 0;
+      font-weight: 300;
+    }
+
+    /* Decorative element */
+    .line {
+      width: 50px;
+      height: 4px;
+      background-color: #ff7f50;
+      margin: 20px auto;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <p class="countdown">Time until event: <span id="timer"></span></p>
+    <div class="line"></div>
+    <p class="message" id="message"></p>
+    <p class="final-message" id="finalMessage"></p> <!-- Final message element -->
+  </div>
+
+  <script>
+    const messages = [
+      "Happy Birthday!",       // English
+      "जन्मदिन मुबारक हो!",  // Hindi
+      "Joyeux Anniversaire!",  // French
+      "Feliz Cumpleaños!",     // Spanish
+      "Buon Compleanno!",      // Italian
+      "Alles Gute zum Geburtstag!", // German
+      "С Днем Рождения!",      // Russian
+      "生まれてきてくれてありがとう!", // Japanese
+      "축하합니다 생일 축하합니다!", // Korean
+      "Selamat Ulang Tahun!",  // Indonesian
+      "Συγχαρητήρια για τα Γενέθλιά σας!", // Greek
+      "Tüm güzel dilekler sizinle olsun!", // Turkish
+      "生日快乐!",              // Chinese (Simplified)
+      "सुखद जन्मदिन!",        // Marathi
+      "Feliz Aniversário!",    // Portuguese
+      "Zpiekunkowane urodziny!", // Polish
+    ];
+
+    let index = 0;
+    let countdownInterval;
+
+    // Set the target date and time to 12:00 AM on October 8th
+    const targetTime = new Date("2024-10-08T00:00:00"); // Set to October 8, 2024, at 12:00 AM
+
+    // Function to start the countdown
+    function startCountdown() {
+      clearInterval(countdownInterval); // Clear any existing intervals
+
+      function countdown() {
+        const now = new Date();
+        const timeRemaining = targetTime - now;
+
+        const hours = Math.floor(timeRemaining / 1000 / 60 / 60);
+        const minutes = Math.floor((timeRemaining / 1000 / 60) % 60);
+        const seconds = Math.floor((timeRemaining / 1000) % 60);
+
+        if (timeRemaining > 0) {
+          document.getElementById('timer').textContent = `${hours}h ${minutes}m ${seconds}s`;
+        } else {
+          // Hide the countdown and line, and start displaying birthday messages
+          document.querySelector('.countdown').style.display = 'none';
+          document.querySelector('.line').style.display = 'none';
+          displayBirthdayMessages(); // Start displaying birthday messages
+          clearInterval(countdownInterval); // Stop the countdown
+        }
+      }
+
+      countdownInterval = setInterval(countdown, 1000); // Update timer every second
+    }
+
+    function displayBirthdayMessages() {
+      const messageElement = document.getElementById('message');
+      const finalMessageElement = document.getElementById('finalMessage');
+
+      // Display messages every 0.5 seconds for a total of 16 messages
+      for (let i = 0; i < messages.length; i++) {
+        setTimeout(() => {
+          messageElement.textContent = messages[i];
+          messageElement.classList.add('visible');
+
+          // Hide the previous message after 0.5 seconds
+          setTimeout(() => {
+            messageElement.classList.remove('visible');
+          }, 500); // Hide after 0.5 seconds
+        }, i * 1000); // Show each message for 1 second total (0.5 seconds visible, 0.5 seconds hidden)
+      }
+
+      // Show final message after all birthday messages
+      setTimeout(() => {
+        finalMessageElement.textContent = "Wish You A More Brighter Future Than The Brightest Star In The Universe";
+        finalMessageElement.classList.add('visible');
+      }, messages.length * 1000); // Show final message after all birthday messages have been displayed
+    }
+
+    // Start the countdown
+    startCountdown();
+  </script>
+
+</body>
+</html>
